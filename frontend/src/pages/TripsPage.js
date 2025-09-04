@@ -27,7 +27,6 @@ const TripsPage = () => {
         if (window.confirm("Are you sure you want to delete this trip?")) {
             try {
                 await axios.delete(`/api/roadtrips/${id}`);
-                // UI se trip hatayein
                 setTrips(trips.filter(trip => trip._id !== id));
             } catch (error) {
                 console.error("Error deleting trip:", error);
@@ -51,7 +50,6 @@ const TripsPage = () => {
                                 <h2 className="text-xl font-bold text-cars24-blue mb-2">{trip.title}</h2>
                                 <p className="text-gray-600 truncate">{trip.description}</p>
                             </div>
-                            {/* Buttons ka section */}
                             <div className="p-4 bg-gray-50 flex justify-between">
                                 <Link to={`/trips/${trip._id}`} className="text-cars24-blue font-semibold hover:underline">View Details →</Link>
                                 <div>

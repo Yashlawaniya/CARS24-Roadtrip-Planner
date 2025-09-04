@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 const CreateTripPage = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [isSuccess, setIsSuccess] = useState(false); // Success state
+    const [isSuccess, setIsSuccess] = useState(false); 
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,18 +17,17 @@ const CreateTripPage = () => {
         const newTrip = {
             title: title,
             description: description,
-            createdBy: '68b974dacef83a9956199160', // Yahan aapki user ID hi rahegi
+            createdBy: '68b974dacef83a9956199160', 
         };
         try {
             await axios.post('/api/roadtrips', newTrip);
-            setIsSuccess(true); // Form submit hone par success state true karein
+            setIsSuccess(true); 
         } catch (error) {
             console.error('Error creating trip:', error);
             alert('Failed to create trip.');
         }
     };
 
-    // Agar trip successfully create ho gaya hai, to success message dikhayein
     if (isSuccess) {
         return (
             <div className="text-center p-16 bg-white rounded-lg shadow-md">
@@ -43,7 +42,7 @@ const CreateTripPage = () => {
         );
     }
 
-    // Normal case mein form dikhayein
+    
     return (
         <div className="container mx-auto mt-10 p-8 max-w-lg shadow-lg rounded-lg bg-white relative">
             {/* Back Button */}

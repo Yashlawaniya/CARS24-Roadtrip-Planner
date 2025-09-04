@@ -7,9 +7,8 @@ import CreateTripPage from './pages/CreateTripPage';
 function App() {
     return (
         <Router>
-            {/* Poori app mein light gray background add kiya */}
             <div className="bg-cars24-secondary min-h-screen">
-                {/* Navbar ko style kiya */}
+
                 <nav className="bg-white shadow-md p-4">
                     <div className="container mx-auto flex justify-between items-center">
                         <Link to="/" className="text-2xl font-bold text-cars24-blue">RoadTrip Planner</Link>

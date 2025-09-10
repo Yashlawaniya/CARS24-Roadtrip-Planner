@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import WeatherWidget from '../components/WeatherWidget';
 
 const TripsPage = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { auth } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const fetchTrips = async () => {
         try {
             const response = await axios.get('/api/roadtrips');
             setTrips(response.data);
-            setLoading(false);
         } catch (error) {
-            console.error("Error fetching trips:", error);
+            console.error('Error fetching trips:', error);
+        } finally {
             setLoading(false);
         }
     };
@@ -21,22 +25,41 @@ const TripsPage = () => {
         fetchTrips();
     }, []);
 
-    // Delete function
     const handleDelete = async (id) => {
-        // Confirmation dialog
-        if (window.confirm("Are you sure you want to delete this trip?")) {
+        if (!auth.isAuthenticated) {
+            return navigate('/login');
+        }
+        if (window.confirm('Are you sure you want to delete this trip?')) {
             try {
-                await axios.delete(`/api/roadtrips/${id}`);
-                setTrips(trips.filter(trip => trip._id !== id));
+                const token = localStorage.getItem('token');
+                await axios.delete(`/api/roadtrips/${id}`, { headers: { 'x-auth-token': token } });
+                setTrips(trips.filter((trip) => trip._id !== id));
             } catch (error) {
-                console.error("Error deleting trip:", error);
-                alert("Failed to delete trip.");
+                console.error('Error deleting trip:', error);
+                alert('Failed to delete trip.');
             }
         }
     };
 
+    const handleLike = async (id) => {
+        if (!auth.isAuthenticated) {
+            return navigate('/login');
+        }
+        try {
+            const token = localStorage.getItem('token');
+            const config = { headers: { 'x-auth-token': token } };
+            const res = await axios.put(`/api/roadtrips/${id}/like`, null, config);
+            const updatedTrips = trips.map((trip) =>
+                trip._id === id ? { ...trip, likes: res.data } : trip
+            );
+            setTrips(updatedTrips);
+        } catch (err) {
+            console.error('Error liking trip:', err);
+        }
+    };
+
     if (loading) {
-        return <div>Loading trips...</div>;
+        return <div className="text-center mt-10">Loading trips...</div>;
     }
 
     return (
@@ -44,21 +67,35 @@ const TripsPage = () => {
             <h1 className="text-3xl font-bold mb-6">Explore Road Trips</h1>
             {trips.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {trips.map(trip => (
-                        <div key={trip._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                            <div className="p-6 flex-grow">
-                                <h2 className="text-xl font-bold text-cars24-blue mb-2">{trip.title}</h2>
-                                <p className="text-gray-600 truncate">{trip.description}</p>
-                            </div>
-                            <div className="p-4 bg-gray-50 flex justify-between">
-                                <Link to={`/trips/${trip._id}`} className="text-cars24-blue font-semibold hover:underline">View Details →</Link>
-                                <div>
-                                    <button onClick={() => alert('Edit feature coming soon!')} className="text-sm font-medium text-green-600 hover:text-green-800 mr-3">Edit</button>
-                                    <button onClick={() => handleDelete(trip._id)} className="text-sm font-medium text-red-600 hover:text-red-800">Delete</button>
+                    {trips
+                        .filter(trip => trip.createdBy?._id !== auth.user?.id)
+                        .map((trip) => (
+                            <div key={trip._id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                                <img src={trip.coverImage} alt={trip.title} className="w-full h-48 object-cover" />
+                                <div className="p-6 flex-grow">
+                                    <h2 className="text-xl font-bold text-cars24-blue mb-2">{trip.title}</h2>
+                                    <p className="text-gray-600 truncate mb-4">{trip.description}</p>
+                                    <WeatherWidget location={trip.route[0]?.locationName} />
+                                </div>
+                                <div className="p-4 bg-gray-50 flex justify-between items-center">
+                                    <button onClick={() => handleLike(trip._id)} className="flex items-center text-gray-600 hover:text-red-500 transition-colors duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-1" fill={auth.user && trip.likes.includes(auth.user.id) ? 'rgb(239 68 68)' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                                        </svg>
+                                        <span className="font-semibold text-sm">{trip.likes.length}</span>
+                                    </button>
+                                    <div className="flex items-center">
+                                        <Link to={`/trips/${trip._id}`} className="text-sm font-medium text-cars24-blue hover:underline mr-3">Details</Link>
+                                        {auth.isAuthenticated && trip.createdBy && trip.createdBy._id === auth.user.id && (
+                                            <>
+                                                <Link to={`/edit-trip/${trip._id}`} className="text-sm font-medium text-green-600 hover:text-green-800 mr-3">Edit</Link>
+                                                <button onClick={() => handleDelete(trip._id)} className="text-sm font-medium text-red-600 hover:text-red-800">Delete</button>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
             ) : (
                 <div className="bg-white p-6 rounded-lg shadow-md text-center">

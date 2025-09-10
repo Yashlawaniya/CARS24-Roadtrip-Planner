@@ -12,8 +12,11 @@ const RoadTripSchema = new mongoose.Schema({
     },
     coverImage: {
         type: String,
-        default: 'default_cover_image_url.jpg'
+        default: '/default_cover_image.jpg'
     },
+    images: [{ 
+        type: String
+    }],
     route: [{
         locationName: String,
         description: String,
@@ -31,6 +34,10 @@ const RoadTripSchema = new mongoose.Schema({
     reviews: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review'
+    }],
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
     }]
 }, { timestamps: true });
 

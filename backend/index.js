@@ -23,7 +23,11 @@ const app = express();
 const PORT = process.env.PORT || 5000; 
 
 app.use(cors({
-    origin: "https://cars-24-roadtrip-planner.vercel.app" // tera frontend URL
+    origin: [
+        "https://roadtrip.vercel.app", 
+        "http://roadtrip.com",
+        "https://roadtrip.com"
+    ]
 }));
 
 // Middleware to parse JSON

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { BASE_URL } from '../api';
 
 const CreateTripPage = () => {
     const [title, setTitle] = useState('');
@@ -52,7 +53,7 @@ const CreateTripPage = () => {
                     'x-auth-token': token
                 }
             };
-            await axios.post('/api/roadtrips', formData, config);
+            await axios.post('${BASE_URL}/api/roadtrips', formData, config);
             setIsSuccess(true);
         } catch (error) {
             console.error('Error creating trip:', error);

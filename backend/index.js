@@ -43,6 +43,8 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/route', routeRoutes);
 app.use('/api/places', placesRoutes);
 
+
+
 // Server listen
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

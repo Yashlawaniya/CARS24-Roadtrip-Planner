@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { BASE_URL } from '../api'; //
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,7 +15,8 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/auth/login', formData);
+            // const response = await axios.post('/api/auth/login', formData);
+            const response = await axios.post(`${BASE_URL}/api/auth/login`, formData);
             
             login(response.data.token);
 

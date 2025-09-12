@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import WeatherWidget from '../components/WeatherWidget'; 
+import { BASE_URL } from '../api';
 
 const MyTripsPage = () => {
     const [trips, setTrips] = useState([]);
@@ -16,7 +17,7 @@ const MyTripsPage = () => {
                 try {
                     const token = localStorage.getItem('token');
                     const config = { headers: { 'x-auth-token': token } };
-                    const response = await axios.get('/api/roadtrips/mytrips', config);
+                    const response = await axios.get(`${BASE_URL}/api/roadtrips/mytrips`, config);
                     setTrips(response.data);
                 } catch (error) {
                     console.error("Error fetching my trips:", error);
@@ -32,7 +33,7 @@ const MyTripsPage = () => {
         if (window.confirm("Are you sure you want to delete this trip?")) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`/api/roadtrips/${id}`, { headers: { 'x-auth-token': token } });
+                await axios.delete(`${BASE_URL}/api/roadtrips/${id}`, { headers: { 'x-auth-token': token } });
                 setTrips(trips.filter(trip => trip._id !== id));
             } catch (error) {
                 console.error("Error deleting trip:", error);

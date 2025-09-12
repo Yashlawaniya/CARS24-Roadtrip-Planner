@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { BASE_URL } from '../api';
 
 const EditTripPage = () => {
     const [title, setTitle] = useState('');
@@ -16,7 +17,7 @@ const EditTripPage = () => {
     useEffect(() => {
         const fetchTrip = async () => {
             try {
-                const response = await axios.get(`/api/roadtrips/${id}`);
+                const response = await axios.get(`${BASE_URL}/api/roadtrips/${id}`);
                 const { title, description, route } = response.data;
                 setTitle(title);
                 setDescription(description);
@@ -64,7 +65,7 @@ const EditTripPage = () => {
                 }
             };
             
-            await axios.put(`/api/roadtrips/${id}`, formData, config);
+            await axios.put(`${BASE_URL}/api/roadtrips/${id}`, formData, config);
             alert('Trip updated successfully!');
             navigate('/trips');
         } catch (error) {

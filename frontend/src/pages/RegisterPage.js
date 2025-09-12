@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { BASE_URL } from '../api';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ const RegisterPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/auth/register', formData);
+            await axios.post(`${BASE_URL}/api/auth/register`, formData);
             alert('Registration successful! Please log in.');
             navigate('/login');
         } catch (error) {

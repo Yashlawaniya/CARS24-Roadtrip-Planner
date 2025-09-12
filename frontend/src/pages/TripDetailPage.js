@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import WeatherWidget from '../components/WeatherWidget';
 import MapComponent from '../components/MapComponent';
 import SimpleImageViewer from 'react-simple-image-viewer';
+import { BASE_URL } from '../api'; // 
 
 const TripDetailPage = () => {
     const [trip, setTrip] = useState(null);
@@ -29,8 +30,8 @@ const TripDetailPage = () => {
                 const config = { headers: { 'x-auth-token': token } };
 
                 const [tripRes, commentsRes] = await Promise.all([
-                    axios.get(`/api/roadtrips/${id}`),
-                    axios.get(`/api/comments/${id}`)
+                    axios.get(`${BASE_URL}/api/roadtrips/${id}`),
+                    axios.get(`${BASE_URL}/api/comments/${id}`)
                 ]);
                 
                 const tripData = tripRes.data;
@@ -41,11 +42,11 @@ const TripDetailPage = () => {
                     const startDest = tripData.route[0].locationName;
                     const finalDest = tripData.route[1].locationName;
 
-                    axios.post('/api/route', { startLocationName: startDest, endLocationName: finalDest }, config)
+                    axios.post(`${BASE_URL}/api/route`, { startLocationName: startDest, endLocationName: finalDest }, config)
                         .then(res => setRouteData(res.data))
                         .catch(err => console.error("Error fetching route:", err));
 
-                    axios.get(`/api/places?location=${finalDest}`, config)
+                    axios.get(`${BASE_URL}/api/places?location=${finalDest}`, config)
                         .then(res => setPlaces(res.data))
                         .catch(err => console.error("Error fetching places:", err));
                 }
@@ -64,8 +65,8 @@ const TripDetailPage = () => {
         try {
             const token = localStorage.getItem('token');
             const config = { headers: { 'x-auth-token': token } };
-            const res = await axios.post(`/api/comments/${id}`, { text: newComment }, config);
-            const populatedComment = { ...res.data, user: { username: auth.user?.username || 'You' } };
+            const res = await axios.post(`${BASE_URL}/api/comments/${id}`, { text: newComment }, config);
+            const populatedComment = { ...res.data, user: { username: auth.user?.username || 'User' } };
             setComments([populatedComment, ...comments]);
             setNewComment('');
         } catch (err) {

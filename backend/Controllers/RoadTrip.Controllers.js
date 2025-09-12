@@ -98,14 +98,14 @@ exports.getAllRoadTrips = async (req, res) => {
 };
 
 // UPDATE a road trip by ID
-exports.updateRoadTrip = async (req, res) => {
-    try {
-        const updatedTrip = await RoadTrip.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json(updatedTrip);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-};
+// exports.updateRoadTrip = async (req, res) => {
+//     try {
+//         const updatedTrip = await RoadTrip.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//         res.status(200).json(updatedTrip);
+//     } catch (error) {
+//         res.status(400).json({ message: error.message });
+//     }
+// };
 
 // DELETE a road trip by ID
 exports.deleteRoadTrip = async (req, res) => {

@@ -11,7 +11,7 @@ const WeatherWidget = ({ location }) => {
                 try {
                     setLoading(true);
                     
-                    const response = await axios.get(`/api/weather?location=${location}`);
+                    const response = await axios.get(`${BASE_URL}/api/weather?location=${location}`);
                     setWeather(response.data);
                     setLoading(false);
                 } catch (error) {

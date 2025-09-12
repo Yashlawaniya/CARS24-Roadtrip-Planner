@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const cors = require('cors');
+
+
 
 // Route files import
 const userRoutes = require('./Routes/User.Routes.js');
@@ -18,6 +21,10 @@ const logger = require('./Middlewares/logger.Middelwares.js');
 // Express app initialize 
 const app = express();
 const PORT = process.env.PORT || 5000; 
+
+app.use(cors({
+    origin: "https://cars-24-roadtrip-planner.vercel.app" // tera frontend URL
+}));
 
 // Middleware to parse JSON
 app.use(express.json());

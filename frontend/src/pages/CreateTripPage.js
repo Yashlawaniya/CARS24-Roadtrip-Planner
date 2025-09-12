@@ -53,7 +53,7 @@ const CreateTripPage = () => {
                     'x-auth-token': token
                 }
             };
-            await axios.post('${BASE_URL}/api/roadtrips', formData, config);
+            await axios.post(`${BASE_URL}/api/roadtrips`, formData, config);
             setIsSuccess(true);
         } catch (error) {
             console.error('Error creating trip:', error);

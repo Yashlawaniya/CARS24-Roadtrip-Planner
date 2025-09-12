@@ -3,7 +3,7 @@
 
 -----
 
-# **Cars24 Road Trip Planner 🚗💨🚗🌍**
+# **Road Trip Planner 🚗💨🚗🌍**
 
 The Cars24 Road Trip Planner is a full-stack MERN web application built as a conceptual project. It serves as a one-stop platform for travel enthusiasts to discover, create, share, and explore road trips around the world. Users can publish their journeys with detailed routes, upload multiple photos, and engage with a community of fellow travelers through likes and comments.
 

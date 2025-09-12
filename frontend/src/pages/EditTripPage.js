@@ -67,7 +67,7 @@ const EditTripPage = () => {
             
             await axios.put(`${BASE_URL}/api/roadtrips/${id}`, formData, config);
             alert('Trip updated successfully!');
-            navigate('/trips');
+            window.location.href = '/trips';
         } catch (error) {
             console.error('Error updating trip:', error);
             alert('Failed to update trip.');

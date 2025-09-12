@@ -23,7 +23,7 @@ const app = express();
 const PORT = process.env.PORT || 5000; 
 
 app.use(cors({
-    origin: "https://roadtrip.vercel.app" 
+    origin: "https://roadtripy.vercel.app" 
 }));
 
 // Middleware to parse JSON
